@@ -12,16 +12,6 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 
 class LaptopListAdapter(private val list: List<Laptop>, val context: Context) : RecyclerView.Adapter<ViewHolder>() {
 
-    class HeaderVH(view: View) : ViewHolder(view) {
-        init {
-            view.findViewById<Button>(R.id.button).setOnClickListener {
-                (this.itemView.context as MainActivity).onClickCalled(
-                    view.findViewById<TextView>(R.id.model_input_edit_text).text.toString()
-                )
-            }
-        }
-    }
-    
     class ItemVH(view: View) : ViewHolder(view) {
         val model : TextView = view.findViewById(R.id.tv_model)
         val cpu : TextView = view.findViewById(R.id.tv_cpu)
@@ -31,7 +21,6 @@ class LaptopListAdapter(private val list: List<Laptop>, val context: Context) : 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val vh = when(viewType){
             TYPE_ITEM -> ItemVH(LayoutInflater.from(parent.context).inflate(R.layout.laptop_item, parent, false))
-            TYPE_HEADER -> HeaderVH(LayoutInflater.from(parent.context).inflate(R.layout.header_item, parent, false))
             else -> null
         }
         Log.d("test!", vh.toString())
@@ -42,14 +31,10 @@ class LaptopListAdapter(private val list: List<Laptop>, val context: Context) : 
         try {
             if (holder is ItemVH) {
                 val vh: ItemVH = holder as ItemVH
-
-                val elem = list[position - 1]
+                val elem = list[position]
                 vh.model.text = elem.model
                 vh.ram.text = elem.ram
                 vh.cpu.text = elem.cpu
-
-            } else if (holder is HeaderVH) {
-                val vh: HeaderVH = holder as HeaderVH
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -57,17 +42,14 @@ class LaptopListAdapter(private val list: List<Laptop>, val context: Context) : 
     }
 
     override fun getItemCount(): Int {
-        return list.size + 1
+        return list.size
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == 0) {
-            TYPE_HEADER
-        } else TYPE_ITEM
+        return TYPE_ITEM
     }
 
     companion object {
         private const val TYPE_ITEM = 0
-        private const val TYPE_HEADER = 1
     }
 }

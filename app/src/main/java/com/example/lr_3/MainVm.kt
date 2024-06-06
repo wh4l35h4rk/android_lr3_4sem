@@ -15,7 +15,6 @@ class MainVm : ViewModel() {
         } else {
             item_list.value = Laptop.item_list2
         }
-
     }
 
 }

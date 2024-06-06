@@ -2,6 +2,7 @@ package com.example.lr_3
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -26,17 +27,23 @@ class MainActivity : AppCompatActivity() {
                 model=vm.item_list.value!![i].model,
                 cpu=vm.item_list.value!![i].cpu,
                 ram=vm.item_list.value!![i].ram))
-//            model=Laptop.set_item(i).get("model")!!
         }
         binding.recycler.adapter = LaptopListAdapter(list, applicationContext)
 
-        vm.item_list.observe(this) {
+        findViewById<Button>(R.id.button).setOnClickListener {
+            vm.updateQuery(findViewById<TextView>(R.id.model_input_edit_text).text.toString())
+            recreate()
+        }
+
+        vm.query.observe(this) {
             findViewById<TextView>(R.id.model_input_edit_text).text = it.toString()
         }
+
     }
 
     fun onClickCalled(newValue: String?) {
         Log.d("test!!! new val is:", newValue.toString())
         vm.updateQuery(newValue!!)
     }
+
 }
